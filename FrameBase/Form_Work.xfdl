@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="Form_Work" width="1280" height="720" titletext="Form_Work" onload="Form_Work_onload">
+    <Layouts>
+      <Layout width="1280" height="720" screenid="Desktop_screen">
+        <Button id="btn_InAppBrowser1_open" taborder="0" text="InAppBrowser 열기 (WKWebView 로 구현)" left="44" top="21" width="311" height="53" onclick="btn_InAppBrowser1_open_onclick"/>
+        <Button id="btn_InAppBrowser2_open" taborder="1" text="InAppBrowser2 열기 (SafariviewController 로 구현)" left="41" top="105" width="315" height="55" onclick="btn_InAppBrowser2_open_onclick"/>
+      </Layout>
+      <Layout name="Tablet_screen" width="800" height="1280" screenid="Tablet_screen"/>
+      <Layout name="Phone_screen" width="480" height="768" screenid="Phone_screen"/>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[
+this.Form_Work_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	// InAppBrowser1 플러그인 생성후 초기화 (WKWebView)
+	this.addChild("InAppBrowserPlugin", new nexacro.Standard("InAppBrowserPlugin"));
+	this.InAppBrowserPlugin.addEventHandler("on_callback", this.on_InAppBrowserPlugin_callback, this);
+	
+	// InAppBrowser2 플러그인 생성후 초기화 (SafariviewController)
+	this.addChild("SafariViewControllerPlugin", new nexacro.Standard("SafariViewControllerPlugin"));
+	this.SafariViewControllerPlugin.addEventHandler("on_callback", this.on_SafariViewControllerPlugin_callback, this);
+};
+
+
+this.btn_InAppBrowser1_open_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var objParam = { starturl : "https://www.daum.net" };
+	
+	this.InAppBrowserPlugin.callMethod("show", objParam);
+};
+
+this.btn_InAppBrowser2_open_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+ 	var objParam = { starturl : "https://www.naver.com" };
+							  
+	this.SafariViewControllerPlugin.callMethod("show", objParam);
+};
+
+/*
+  InAppBrowserPlugin.callMethod 콜백함수
+  e 변수에 앱 에서 셋팅해 반환한 데이터를 담고있다.
+*/
+this.on_InAppBrowserPlugin_callback = function(obj, e)
+{
+    var str = "\nthis.on_callback svcid       ::: "+e.svcid
+            + "\nthis.on_callback reason      ::: "+e.reason
+            + "\nthis.on_callback returnvalue ::: "+e.returnvalue;
+
+	// StandardPlugin.callMethod 사용시 사용한 Service Id
+    alert("on_InAppBrowserPlugin_callback --" + e.returnvalue);
+};
+
+/*
+  SafariViewControllerPlugin.callMethod 콜백함수
+  e 변수에 앱 에서 셋팅해 반환한 데이터를 담고있다.
+*/
+this.on_SafariViewControllerPlugin_callback = function(obj, e)
+{
+    var str = "\nthis.on_callback svcid       ::: "+e.svcid
+            + "\nthis.on_callback reason      ::: "+e.reason
+            + "\nthis.on_callback returnvalue ::: "+e.returnvalue;
+
+	// StandardPlugin.callMethod 사용시 사용한 Service Id
+    alert("on_SafariViewControllerPlugin_callback --" + e.returnvalue);
+};
+]]></Script>
+  </Form>
+</FDL>
